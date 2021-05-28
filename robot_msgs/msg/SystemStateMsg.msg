@@ -1,0 +1,7 @@
+Header header
+
+bool rc_connected
+uint32 error_code
+uint8 operational_state
+uint8 ctrl_state
+BatteryStateMsg battery_state

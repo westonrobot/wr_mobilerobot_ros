@@ -1,0 +1,6 @@
+Header header
+
+MotionControlType desired_motion
+MotionControlType actual_motion
+OdometryMsg odometry
+bool collision_detected
