@@ -14,7 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
     geometry_msgs
     tf2 
     tf2_ros    
-    scout_msgs
+    robot_msgs
 )
 
 find_package(wrp_sdk REQUIRED)
@@ -29,7 +29,7 @@ find_package(zbus REQUIRED)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES scout_messenger
-  CATKIN_DEPENDS scout_msgs
+  CATKIN_DEPENDS robot_msgs
 #   DEPENDS Boost
 )
 

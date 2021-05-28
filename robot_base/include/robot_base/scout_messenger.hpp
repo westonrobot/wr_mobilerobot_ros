@@ -17,11 +17,11 @@
 // #include <tf/transform_broadcaster.h>
 #include <tf2_ros/transform_broadcaster.h>
 
-#include "scout_msgs/LightMode.h"
-#include "scout_msgs/LightControlType.h"
-#include "scout_msgs/SysCtrlState.h"
-#include "scout_msgs/SysOperState.h"
-#include "scout_msgs/SysErrorCode.h"
+#include "robot_msgs/LightMode.h"
+#include "robot_msgs/LightControlType.h"
+#include "robot_msgs/SysCtrlState.h"
+#include "robot_msgs/SysOperState.h"
+#include "robot_msgs/SysErrorCode.h"
 
 #include "wrp_sdk/mobile_base/westonrobot/mobile_base.hpp"
 
@@ -75,7 +75,7 @@ private:
     ros::Time current_time_;
 
     void TwistCmdCallback(const geometry_msgs::Twist::ConstPtr &msg);
-    void LightCmdCallback(const scout_msgs::LightControlType::ConstPtr &msg);
+    void LightCmdCallback(const robot_msgs::LightControlType::ConstPtr &msg);
     void PublishOdometryToROS(float linear, float angular, float dt);
 };
 } // namespace westonrobot
