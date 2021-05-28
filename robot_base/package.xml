@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>scout_base</name>
+  <name>robot_base</name>
   <version>0.3.3</version>
   <description>AgileX Scout robot driver</description>
 
