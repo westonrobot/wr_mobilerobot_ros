@@ -7,11 +7,11 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#include "scout_base/scout_messenger.hpp"
+#include "robot_base/scout_messenger.hpp"
 
 #include <tf/transform_broadcaster.h>
 
-#include "scout_msgs/RobotState.h"
+#include "robot_msgs/RobotState.h"
 
 namespace westonrobot {
 ScoutROSMessenger::ScoutROSMessenger(ros::NodeHandle *nh)
@@ -23,22 +23,22 @@ ScoutROSMessenger::ScoutROSMessenger(MobileBase *scout, ros::NodeHandle *nh)
 void ScoutROSMessenger::SetupSubscription() {
   // odometry publisher
   odom_publisher_ = nh_->advertise<nav_msgs::Odometry>(odom_topic_name_, 50);
-  system_state_publisher_ = nh_->advertise<scout_msgs::SystemStateMsg>(
+  system_state_publisher_ = nh_->advertise<robot_msgs::SystemStateMsg>(
       "/mobilebase_system_status", 10);
 
-  motion_state_publisher_ = nh_->advertise<scout_msgs::MotionStateMsg>(
+  motion_state_publisher_ = nh_->advertise<robot_msgs::MotionStateMsg>(
       "/mobilebase_motion_status", 10);
 
-  light_state_publisher_ = nh_->advertise<scout_msgs::LightControlType>(
+  light_state_publisher_ = nh_->advertise<robot_msgs::LightControlType>(
       "/mobilebase_light_status", 10);
 
-  actuator_state_publisher_ = nh_->advertise<scout_msgs::ActuatorStateMsg>(
+  actuator_state_publisher_ = nh_->advertise<robot_msgs::ActuatorStateMsg>(
       "/mobilebase_actuator_status", 10);
 
   // cmd subscriber
   motion_cmd_subscriber_ = nh_->subscribe<geometry_msgs::Twist>(
       "/cmd_vel", 5, &ScoutROSMessenger::TwistCmdCallback, this);
-  light_cmd_subscriber_ = nh_->subscribe<scout_msgs::LightControlType>(
+  light_cmd_subscriber_ = nh_->subscribe<robot_msgs::LightControlType>(
       "/scout_light_control", 5, &ScoutROSMessenger::LightCmdCallback, this);
 }
 
@@ -68,25 +68,25 @@ void ScoutROSMessenger::GetCurrentMotionCmdForSim(float &linear,
 }
 
 void ScoutROSMessenger::LightCmdCallback(
-    const scout_msgs::LightControlType::ConstPtr &msg) {
+    const robot_msgs::LightControlType::ConstPtr &msg) {
   if (!simulated_robot_) {
     if (msg->enable_cmd_light_control) {
       LightCommandMsg cmd;
 
       switch (msg->light_mode) {
-        case scout_msgs::LightMode::LIGHT_MODE_CONST_OFF: {
+        case robot_msgs::LightMode::LIGHT_MODE_CONST_OFF: {
           cmd.command.light_mode = LIGHT_MODE::LIGHT_MODE_CONST_OFF;
           break;
         }
-        case scout_msgs::LightMode::LIGHT_MODE_CONST_ON: {
+        case robot_msgs::LightMode::LIGHT_MODE_CONST_ON: {
           cmd.command.light_mode = LIGHT_MODE::LIGHT_MODE_CONST_ON;
           break;
         }
-        case scout_msgs::LightMode::LIGHT_MODE_BREATH: {
+        case robot_msgs::LightMode::LIGHT_MODE_BREATH: {
           cmd.command.light_mode = LIGHT_MODE::LIGHT_MODE_BREATH;
           break;
         }
-        case scout_msgs::LightMode::LIGHT_MODE_CUSTOM: {
+        case robot_msgs::LightMode::LIGHT_MODE_CUSTOM: {
           cmd.command.light_mode = LIGHT_MODE::LIGHT_MODE_CUSTOM;
           cmd.command.light_custom = msg->light_custom;
           break;
@@ -118,10 +118,10 @@ void ScoutROSMessenger::PublishStateToROS() {
 
   // publish scout state message
 
-  scout_msgs::SystemStateMsg system_state_msg;
-  scout_msgs::MotionStateMsg motion_state_msg;
-  scout_msgs::LightControlType light_state_msg;
-  scout_msgs::ActuatorStateMsg actuator_state_msg;
+  robot_msgs::SystemStateMsg system_state_msg;
+  robot_msgs::MotionStateMsg motion_state_msg;
+  robot_msgs::LightControlType light_state_msg;
+  robot_msgs::ActuatorStateMsg actuator_state_msg;
 
   system_state_msg.header.stamp = current_time_;
   motion_state_msg.header.stamp = current_time_;
@@ -192,60 +192,60 @@ void ScoutROSMessenger::PublishStateToROS() {
   switch (system_state.error_code) {
     case SYS_ERROR_CODE::SYS_ERROR_CODE_NONE: {
       system_state_msg.error_code =
-          scout_msgs::SysErrorCode::SYS_ERROR_CODE_NONE;
+          robot_msgs::SysErrorCode::SYS_ERROR_CODE_NONE;
       break;
     }
     case SYS_ERROR_CODE::SYS_ERROR_CODE_BATTERY_LOW_WARN: {
       system_state_msg.error_code =
-          scout_msgs::SysErrorCode::SYS_ERROR_CODE_BATTERY_LOW_WARN;
+          robot_msgs::SysErrorCode::SYS_ERROR_CODE_BATTERY_LOW_WARN;
       break;
     }
 
     case SYS_ERROR_CODE::SYS_ERROR_CODE_MOTOR_OVERHEAT_WARN: {
       system_state_msg.error_code =
-          scout_msgs::SysErrorCode::SYS_ERROR_CODE_MOTOR_OVERHEAT_WARN;
+          robot_msgs::SysErrorCode::SYS_ERROR_CODE_MOTOR_OVERHEAT_WARN;
       break;
     }
 
     case SYS_ERROR_CODE::SYS_ERROR_CODE_DRIVER_OVERHEAT_WARN: {
       system_state_msg.error_code =
-          scout_msgs::SysErrorCode::SYS_ERROR_CODE_DRIVER_OVERHEAT_WARN;
+          robot_msgs::SysErrorCode::SYS_ERROR_CODE_DRIVER_OVERHEAT_WARN;
       break;
     }
 
     case SYS_ERROR_CODE::SYS_ERROR_CODE_WARN_BIT_MASK: {
       system_state_msg.error_code =
-          scout_msgs::SysErrorCode::SYS_ERROR_CODE_WARN_BIT_MASK;
+          robot_msgs::SysErrorCode::SYS_ERROR_CODE_WARN_BIT_MASK;
       break;
     }
 
     case SYS_ERROR_CODE::SYS_ERROR_CODE_BATTERY_LOW_FAULT: {
       system_state_msg.error_code =
-          scout_msgs::SysErrorCode::SYS_ERROR_CODE_BATTERY_LOW_FAULT;
+          robot_msgs::SysErrorCode::SYS_ERROR_CODE_BATTERY_LOW_FAULT;
       break;
     }
 
     case SYS_ERROR_CODE::SYS_ERROR_CODE_MOTOR_OVERHEAT_FAULT: {
       system_state_msg.error_code =
-          scout_msgs::SysErrorCode::SYS_ERROR_CODE_MOTOR_OVERHEAT_FAULT;
+          robot_msgs::SysErrorCode::SYS_ERROR_CODE_MOTOR_OVERHEAT_FAULT;
       break;
     }
 
     case SYS_ERROR_CODE::SYS_ERROR_CODE_DRIVER_OVERHEAT_FAULT: {
       system_state_msg.error_code =
-          scout_msgs::SysErrorCode::SYS_ERROR_CODE_DRIVER_OVERHEAT_FAULT;
+          robot_msgs::SysErrorCode::SYS_ERROR_CODE_DRIVER_OVERHEAT_FAULT;
       break;
     }
 
     case SYS_ERROR_CODE::SYS_ERROR_CODE_MOTOR_COMM_FAULT: {
       system_state_msg.error_code =
-          scout_msgs::SysErrorCode::SYS_ERROR_CODE_MOTOR_COMM_FAULT;
+          robot_msgs::SysErrorCode::SYS_ERROR_CODE_MOTOR_COMM_FAULT;
       break;
     }
 
     case SYS_ERROR_CODE::SYS_ERROR_CODE_FAULT_BIT_MASK: {
       system_state_msg.error_code =
-          scout_msgs::SysErrorCode::SYS_ERROR_CODE_FAULT_BIT_MASK;
+          robot_msgs::SysErrorCode::SYS_ERROR_CODE_FAULT_BIT_MASK;
       break;
     }
   }
@@ -253,36 +253,36 @@ void ScoutROSMessenger::PublishStateToROS() {
   switch (system_state.operational_state) {
     case SYS_OPER_STATE::SYS_OPER_STATE_OPERATIONAL: {
       system_state_msg.operational_state =
-          scout_msgs::SysOperState::SYS_OPER_STATE_OPERATIONAL;
+          robot_msgs::SysOperState::SYS_OPER_STATE_OPERATIONAL;
       break;
     }
     case SYS_OPER_STATE::SYS_OPER_STATE_INITIALIZATION: {
       system_state_msg.operational_state =
-          scout_msgs::SysOperState::SYS_OPER_STATE_INITIALIZATION;
+          robot_msgs::SysOperState::SYS_OPER_STATE_INITIALIZATION;
       break;
     }
 
     case SYS_OPER_STATE::SYS_OPER_STATE_MAINTENANCE: {
       system_state_msg.operational_state =
-          scout_msgs::SysOperState::SYS_OPER_STATE_MAINTENANCE;
+          robot_msgs::SysOperState::SYS_OPER_STATE_MAINTENANCE;
       break;
     }
 
     case SYS_OPER_STATE::SYS_OPER_STATE_SOFTWARE_UPDATE: {
       system_state_msg.operational_state =
-          scout_msgs::SysOperState::SYS_OPER_STATE_SOFTWARE_UPDATE;
+          robot_msgs::SysOperState::SYS_OPER_STATE_SOFTWARE_UPDATE;
       break;
     }
 
     case SYS_OPER_STATE::SYS_OPER_STATE_ESTOP_ACTIVATED: {
       system_state_msg.operational_state =
-          scout_msgs::SysOperState::SYS_OPER_STATE_ESTOP_ACTIVATED;
+          robot_msgs::SysOperState::SYS_OPER_STATE_ESTOP_ACTIVATED;
       break;
     }
 
     case SYS_OPER_STATE::SYS_OPER_STATE_HARDWARE_FAULT: {
       system_state_msg.operational_state =
-          scout_msgs::SysOperState::SYS_OPER_STATE_HARDWARE_FAULT;
+          robot_msgs::SysOperState::SYS_OPER_STATE_HARDWARE_FAULT;
       break;
     }
   }
@@ -290,30 +290,30 @@ void ScoutROSMessenger::PublishStateToROS() {
   switch (system_state.ctrl_state) {
     case SYS_CTRL_STATE::SYS_CTRL_STATE_UNINITIALIZED: {
       system_state_msg.ctrl_state =
-          scout_msgs::SysCtrlState::SYS_CTRL_STATE_UNINITIALIZED;
+          robot_msgs::SysCtrlState::SYS_CTRL_STATE_UNINITIALIZED;
       break;
     }
     case SYS_CTRL_STATE::SYS_CTRL_STATE_STANDBY: {
       system_state_msg.ctrl_state =
-          scout_msgs::SysCtrlState::SYS_CTRL_STATE_STANDBY;
+          robot_msgs::SysCtrlState::SYS_CTRL_STATE_STANDBY;
       break;
     }
 
     case SYS_CTRL_STATE::SYS_CTRL_STATE_RC_HALT_TRIGGERED: {
       system_state_msg.ctrl_state =
-          scout_msgs::SysCtrlState::SYS_CTRL_STATE_RC_HALT_TRIGGERED;
+          robot_msgs::SysCtrlState::SYS_CTRL_STATE_RC_HALT_TRIGGERED;
       break;
     }
 
     case SYS_CTRL_STATE::SYS_CTRL_STATE_RC_MANUAL_CONTROL: {
       system_state_msg.ctrl_state =
-          scout_msgs::SysCtrlState::SYS_CTRL_STATE_RC_MANUAL_CONTROL;
+          robot_msgs::SysCtrlState::SYS_CTRL_STATE_RC_MANUAL_CONTROL;
       break;
     }
 
     case SYS_CTRL_STATE::SYS_CTRL_STATE_CAN_COMMAND_CONTROL: {
       system_state_msg.ctrl_state =
-          scout_msgs::SysCtrlState::SYS_CTRL_STATE_CAN_COMMAND_CONTROL;
+          robot_msgs::SysCtrlState::SYS_CTRL_STATE_CAN_COMMAND_CONTROL;
       break;
     }
   }
@@ -345,19 +345,19 @@ void ScoutROSMessenger::PublishStateToROS() {
   // light state
   switch (light_state.state.light_mode) {
     case LIGHT_MODE::LIGHT_MODE_BREATH: {
-      light_state_msg.light_mode = scout_msgs::LightMode::LIGHT_MODE_BREATH;
+      light_state_msg.light_mode = robot_msgs::LightMode::LIGHT_MODE_BREATH;
       break;
     }
     case LIGHT_MODE::LIGHT_MODE_CONST_OFF: {
-      light_state_msg.light_mode = scout_msgs::LightMode::LIGHT_MODE_CONST_OFF;
+      light_state_msg.light_mode = robot_msgs::LightMode::LIGHT_MODE_CONST_OFF;
       break;
     }
     case LIGHT_MODE::LIGHT_MODE_CONST_ON: {
-      light_state_msg.light_mode = scout_msgs::LightMode::LIGHT_MODE_CONST_ON;
+      light_state_msg.light_mode = robot_msgs::LightMode::LIGHT_MODE_CONST_ON;
       break;
     }
     case LIGHT_MODE::LIGHT_MODE_CUSTOM: {
-      light_state_msg.light_mode = scout_msgs::LightMode::LIGHT_MODE_CUSTOM;
+      light_state_msg.light_mode = robot_msgs::LightMode::LIGHT_MODE_CUSTOM;
       break;
     }
   }
@@ -393,9 +393,9 @@ void ScoutROSMessenger::PublishSimStateToROS(float linear, float angular) {
 
   // publish scout state message
 
-  scout_msgs::SystemStateMsg system_state_msg;
-  scout_msgs::MotionStateMsg motion_state_msg;
-  scout_msgs::LightControlType light_state_msg;
+  robot_msgs::SystemStateMsg system_state_msg;
+  robot_msgs::MotionStateMsg motion_state_msg;
+  robot_msgs::LightControlType light_state_msg;
 
   system_state_msg.header.stamp = current_time_;
   motion_state_msg.header.stamp = current_time_;
@@ -405,10 +405,10 @@ void ScoutROSMessenger::PublishSimStateToROS(float linear, float angular) {
   // status_msg.motion_state.actual_motion.angular_z = angular;
 
   system_state_msg.operational_state =
-      scout_msgs::SysOperState::SYS_OPER_STATE_OPERATIONAL;
+      robot_msgs::SysOperState::SYS_OPER_STATE_OPERATIONAL;
   system_state_msg.ctrl_state =
-      scout_msgs::SysCtrlState::SYS_CTRL_STATE_CAN_COMMAND_CONTROL;
-  system_state_msg.error_code = scout_msgs::SysErrorCode::SYS_ERROR_CODE_NONE;
+      robot_msgs::SysCtrlState::SYS_CTRL_STATE_CAN_COMMAND_CONTROL;
+  system_state_msg.error_code = robot_msgs::SysErrorCode::SYS_ERROR_CODE_NONE;
   system_state_msg.battery_state.voltage = 29.5;
 
   // for (int i = 0; i < 4; ++i)

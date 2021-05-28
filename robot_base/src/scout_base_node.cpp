@@ -6,7 +6,7 @@
 #include <tf/transform_broadcaster.h>
 
 
-#include "scout_base/scout_messenger.hpp"
+#include "robot_base/scout_messenger.hpp"
 
 using namespace westonrobot;
 
