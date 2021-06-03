@@ -38,7 +38,7 @@ melodic-catkin-isolated-build:
   stage: build
   image: rduweston/ubuntu-ci:melodic
   before_script:
-    - apt update && apt -y install curl ros-$ROS_DISTRO-teleop-twist-keyboard
+    - apt update && apt -y install curl ros-$ROS_DISTRO-teleop-twist-keyboard ros-$ROS_DISTRO-std-msgs
     - echo "deb https://westonrobot.jfrog.io/artifactory/wrtoolbox-release bionic main" | tee /etc/apt/sources.list.d/weston-robot.list
     - curl -sSL 'https://westonrobot.jfrog.io/artifactory/api/security/keypair/wr-deb/public' | apt-key add -
     - apt-get update && apt-get -y install wrp_sdk
