@@ -18,7 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(wrp_sdk REQUIRED)
-find_package(zbus REQUIRED)
+find_package(wrp_zbus REQUIRED)
 
 # find_package(Boost REQUIRED COMPONENTS chrono)
 
@@ -45,7 +45,7 @@ include_directories(
 )
 
 add_library(scout_messenger STATIC src/scout_messenger.cpp)
-target_link_libraries(scout_messenger ${catkin_LIBRARIES} westonrobot::wrp_sdk westonrobot::zbus)
+target_link_libraries(scout_messenger ${catkin_LIBRARIES} westonrobot::wrp_sdk westonrobot::wrp_zbus)
 add_dependencies(scout_messenger ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 add_executable(scout_base_node src/scout_base_node.cpp)
