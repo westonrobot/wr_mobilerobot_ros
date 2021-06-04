@@ -2,10 +2,10 @@
 
 ## Packages
 
-* scout_bringup: launch and configuration files to start ROS nodes 
-* scout_base: a ROS wrapper around **wrp_sdk** to monitor and control the scout robot
-* scout_description: URDF model for the mobile base, a sample urdf (scout_description/sample/scout_v2_nav.xacro) is provided for customized robot with addtional sensors
-* scout_msgs: scout related message definitions
+* robot_bringup: launch and configuration files to start ROS nodes 
+* robot_base: a ROS wrapper around **wrp_sdk** to monitor and control the robot
+* robot_description: URDF model for the mobile base, a sample urdf (robot_description/sample/scout_v2_nav.xacro) is provided for customized robot with addtional sensors
+* robot_msgs: scout related message definitions
 
 ## Supported hardware
 
@@ -16,7 +16,7 @@
 ## Supported software environment
 
 * Ubuntu 18.04: ROS melodic
-* Ubuntu 20.04: ROS noetic, ROS2 foxy
+* Ubuntu 20.04: ROS noetic
 
 ## Communication interface
 
@@ -68,13 +68,18 @@ If the communication between your Linux computer and the robot is set up corretl
 
 1. Install dependent libraries
 
-* **wrp_sdk**: Weston Robot Platform SDK
+    ```
+    $ echo "deb https://westonrobot.jfrog.io/artifactory/wrtoolbox-release bionic main" | sudo tee /etc/apt/sources.list.d/weston-robot.list
+    $ curl -sSL 'https://westonrobot.jfrog.io/artifactory/api/security/keypair/wr-deb/public' | sudo apt-key add -
+    $ sudo apt-get update
+    $ apt search wrp_sdk
+    ```
 
 2. Clone the packages into your catkin or colcon workspace and compile
 
     ```
     $ cd ~/catkin_ws/src
-    $ git clone https://github.com/westonrobot/mobile_base.git  
+    $ git clone https://github.com/westonrobot/wr_mobilerobot_ros.git  
     $ cd ..
     $ catkin_make
     ```
@@ -84,10 +89,10 @@ If the communication between your Linux computer and the robot is set up corretl
 * Start the base node for the real robot
 
     ```
-    $ roslaunch scout_bringup scout_minimal.launch
+    $ roslaunch robot_bringup scout_minimal.launch
     ```
 
-    The [scout_bringup/scout_minimal.launch](scout_bringup/launch/scout_minimal.launch) has 4 parameters:
+    The [robot_bringup/scout_minimal.launch](scout_bringup/launch/scout_minimal.launch) has 4 parameters:
 
     - port_name: specifies the port used to communicate with the robot, default = "can0"
     - simulated_robot: indicates if launching with a simulation, default = "false"
