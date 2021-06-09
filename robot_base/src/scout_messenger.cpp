@@ -319,6 +319,7 @@ void ScoutROSMessenger::PublishStateToROS() {
   }
 
   system_state_msg.battery_state.voltage = system_state.battery_state.voltage;
+  system_state_msg.rc_connected = system_state.rc_connected;
   // actuator state
   for (int i = 0; i < 4; ++i) {
     actuator_state_msg.actuator_state[i].id = actuator_state[i].id;
