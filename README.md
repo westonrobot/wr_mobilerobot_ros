@@ -72,7 +72,7 @@ If the communication between your Linux computer and the robot is set up corretl
     $ echo "deb https://westonrobot.jfrog.io/artifactory/wrtoolbox-release bionic main" | sudo tee /etc/apt/sources.list.d/weston-robot.list
     $ curl -sSL 'https://westonrobot.jfrog.io/artifactory/api/security/keypair/wr-deb/public' | sudo apt-key add -
     $ sudo apt-get update
-    $ apt search wrp_sdk
+    $ sudo apt-get install wrp_sdk
     ```
 
 2. Clone the packages into your catkin or colcon workspace and compile
