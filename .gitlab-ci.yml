@@ -28,7 +28,7 @@ melodic-catkin-build:
     - apt update && apt -y install curl ros-$ROS_DISTRO-teleop-twist-keyboard
     - echo "deb https://westonrobot.jfrog.io/artifactory/wrtoolbox-release bionic main" | tee /etc/apt/sources.list.d/weston-robot.list
     - curl -sSL 'https://westonrobot.jfrog.io/artifactory/api/security/keypair/wr-deb/public' | apt-key add -
-    - apt-get update && apt-get -y install wrp_sdk
+    - apt-get update && apt-get -y install wrp_sdk=0.8.7
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wr_mobilerobot_ros
@@ -41,7 +41,7 @@ melodic-catkin-build:
 #     - apt update && apt -y install curl ros-$ROS_DISTRO-teleop-twist-keyboard ros-$ROS_DISTRO-std-msgs
 #     - echo "deb https://westonrobot.jfrog.io/artifactory/wrtoolbox-release bionic main" | tee /etc/apt/sources.list.d/weston-robot.list
 #     - curl -sSL 'https://westonrobot.jfrog.io/artifactory/api/security/keypair/wr-deb/public' | apt-key add -
-#     - apt-get update && apt-get -y install wrp_sdk
+#     - apt-get update && apt-get -y install wrp_sdk=0.8.7
 #   script:
 #     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
 #     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wr_mobilerobot_ros
