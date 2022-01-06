@@ -117,7 +117,6 @@ void ScoutROSMessenger::PublishStateToROS() {
   auto system_state = scout_->GetSystemState();
 
   // publish scout state message
-
   robot_msgs::SystemStateMsg system_state_msg;
   robot_msgs::MotionStateMsg motion_state_msg;
   robot_msgs::LightControlType light_state_msg;
@@ -127,34 +126,9 @@ void ScoutROSMessenger::PublishStateToROS() {
   motion_state_msg.header.stamp = current_time_;
   light_state_msg.header.stamp = current_time_;
   actuator_state_msg.header.stamp = current_time_;
+
   // motion state
-  // status_msg.motion_state.desired_motion.linear_x =
-  // motion_state.desired_motion.linear.x;
-  // status_msg.motion_state.desired_motion.linear_y =
-  // motion_state.desired_motion.linear.y;
-  // status_msg.motion_state.desired_motion.linear_z =
-  // motion_state.desired_motion.linear.z;
-  // status_msg.motion_state.desired_motion.angular_x =
-  // motion_state.desired_motion.angular.x;
-  // status_msg.motion_state.desired_motion.angular_y =
-  // motion_state.desired_motion.angular.y;
-  // status_msg.motion_state.desired_motion.angular_z =
-  // motion_state.desired_motion.angular.z;
-
-  // status_msg.motion_state.actual_motion.linear_x =
-  // motion_state.actual_motion.linear.x;
-  // status_msg.motion_state.actual_motion.linear_y =
-  // motion_state.actual_motion.linear.y;
-  // status_msg.motion_state.actual_motion.linear_z =
-  // motion_state.actual_motion.linear.z;
-  // status_msg.motion_state.actual_motion.angular_x =
-  // motion_state.actual_motion.angular.x;
-  // status_msg.motion_state.actual_motion.angular_y =
-  // motion_state.actual_motion.angular.y;
-  // status_msg.motion_state.actual_motion.angular_z =
-  // motion_state.actual_motion.angular.z;
-
-  motion_state_msg.desired_motion.linear_x =
+    motion_state_msg.desired_motion.linear_x =
       motion_state.desired_motion.linear.x;
   motion_state_msg.desired_motion.linear_y =
       motion_state.desired_motion.linear.y;
@@ -177,13 +151,6 @@ void ScoutROSMessenger::PublishStateToROS() {
   motion_state_msg.actual_motion.angular_z =
       motion_state.actual_motion.angular.z;
 
-  // status_msg.motion_state.collision_detected =
-  // motion_state.collision_detected;
-  // status_msg.motion_state.odometry.left_wheel =
-  // motion_state.odometry.left_wheel;
-  // status_msg.motion_state.odometry.right_wheel =
-  // motion_state.odometry.right_wheel;
-
   motion_state_msg.collision_detected = motion_state.collision_detected;
   motion_state_msg.odometry.left_wheel = motion_state.odometry.left_wheel;
   motion_state_msg.odometry.right_wheel = motion_state.odometry.right_wheel;
@@ -195,6 +162,7 @@ void ScoutROSMessenger::PublishStateToROS() {
 
   system_state_msg.battery_state.voltage = system_state.battery_state.voltage;
   system_state_msg.rc_connected = system_state.rc_connected;
+
   // actuator state
   for (int i = 0; i < 4; ++i) {
     actuator_state_msg.actuator_state[i].id = actuator_state[i].id;
@@ -214,9 +182,6 @@ void ScoutROSMessenger::PublishStateToROS() {
     actuator_state_msg.actuator_state[i].driver.driver_state =
         actuator_state[i].driver.driver_state;
   }
-  // status_msg.motion_state = motion_state;
-  // status_msg.system_state = system_state;
-  // actuator_state_msgs = actuator_state;
 
   // light state
   switch (light_state.state.light_mode) {
@@ -268,7 +233,6 @@ void ScoutROSMessenger::PublishSimStateToROS(float linear, float angular) {
   }
 
   // publish scout state message
-
   robot_msgs::SystemStateMsg system_state_msg;
   robot_msgs::MotionStateMsg motion_state_msg;
   robot_msgs::LightControlType light_state_msg;
@@ -277,9 +241,6 @@ void ScoutROSMessenger::PublishSimStateToROS(float linear, float angular) {
   motion_state_msg.header.stamp = current_time_;
   light_state_msg.header.stamp = current_time_;
 
-  // status_msg.motion_state.actual_motion.linear_x = linear;
-  // status_msg.motion_state.actual_motion.angular_z = angular;
-
   system_state_msg.operational_state =
       robot_msgs::SysOperState::SYS_OPER_STATE_OPERATIONAL;
   system_state_msg.ctrl_state =
@@ -287,20 +248,7 @@ void ScoutROSMessenger::PublishSimStateToROS(float linear, float angular) {
   system_state_msg.error_code = robot_msgs::SysErrorCode::SYS_ERROR_CODE_NONE;
   system_state_msg.battery_state.voltage = 29.5;
 
-  // for (int i = 0; i < 4; ++i)
-  // {
-  //     status_msg.motor_states[i].current = state.motor_states[i].current;
-  //     status_msg.motor_states[i].rpm = state.motor_states[i].rpm;
-  //     status_msg.motor_states[i].temperature =
-  //     state.motor_states[i].temperature;
-  // }
-
   light_state_msg.enable_cmd_light_control = false;
-  // status_msg.front_light_state.mode = state.front_light_state.mode;
-  // status_msg.front_light_state.custom_value =
-  // state.front_light_state.custom_value; status_msg.rear_light_state.mode =
-  // state.rear_light_state.mode; status_msg.rear_light_state.custom_value =
-  // state.front_light_state.custom_value;
 
   system_state_publisher_.publish(system_state_msg);
   motion_state_publisher_.publish(motion_state_msg);
